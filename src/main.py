@@ -4,29 +4,29 @@ import json
 import logging
 import time
 import os
+import mysql.connector
 import requests
-
 
 class Main:
     """Docstring"""
     def __init__(self):
-        self.hub_connection = None
-        self.HOST = "https://34.95.34.5"  # Setup your host here
+        self._hub_connection = None
+        self.HOST = "http://34.95.34.5"  # Setup your host here
         self.TOKEN = None  # Setup your token here
-        self.TICKETS = None  # Setup your tickets here
+        self.TICKETS = 3  # Setup your tickets here
         self.T_MAX = 23  # Setup your max temperature here
         self.T_MIN = 18  # Setup your min temperature here
-        self.DATABASE = "OxygenDB"  # Setup your database here
+        self.DATABASE = "oxygendb"  # Setup your database here
         #self.dbConnection = None
 
     def __del__(self):
-        if self.hub_connection is not None:
-            self.hub_connection.stop()
+        if self._hub_connection is not None:
+            self._hub_connection.stop()
         # if self.dbConnection != None:
         #     self.dbConnection.close()
 
     def setup(self):
-        # exec(open(os.getcwd() + "/script/mySqlSetup.py").read())
+        exec(open(os.getcwd() + "/script/my_Sql_Setup.py").read())
         exec(open(os.getcwd() + "/script/set_Env_Variables.py").read())
         self.TOKEN = "fHtJqgMACx" #os.environ.get("TOKEN")
         """Docstring"""
@@ -35,7 +35,7 @@ class Main:
     def start(self):
         """Docstring"""
         self.setup()
-        self.hub_connection.start()
+        self._hub_connection.start()
 
         print("Press CTRL+C to exit.")
         while True:
@@ -43,7 +43,7 @@ class Main:
 
     def set_sensor_hub(self):
         """Docstring"""
-        self.hub_connection = (
+        self._hub_connection = (
             HubConnectionBuilder()
             .with_url(f"{self.HOST}/SensorHub?token={self.TOKEN}")
             .configure_logging(logging.INFO)
@@ -58,50 +58,75 @@ class Main:
             .build()
         )
 
-        self.hub_connection.on("ReceiveSensorData", self.on_sensor_data_received)
-        self.hub_connection.on_open(lambda: print("||| Connection opened."))
-        self.hub_connection.on_close(lambda: print("||| Connection closed."))
-        self.hub_connection.on_error(lambda data: print(f"||| \
+        self._hub_connection.on("ReceiveSensorData", self.on_sensor_data_received)
+        self._hub_connection.on_open(lambda: print("||| Connection opened."))
+        self._hub_connection.on_close(lambda: print("||| Connection closed."))
+        self._hub_connection.on_error(lambda data: print(f"||| \
                                An exception was thrown closed: {data.error}"))
 
     def on_sensor_data_received(self, data):
         """Docstring"""
         try:
-            print(data[0]["date"] + " --> " + data[0]["data"])
+            #print(data[0]["date"] + " --> " + data[0]["data"])
             date = data[0]["date"]
             d_p = float(data[0]["data"])
-            self.send_temperature_to_fastapi(date, d_p)
+            #self.send_temperature_to_fastapi(date, d_p)
             self.analyze_datapoint(date, d_p)
         except ValueError as err:
             print(err)
 
     def analyze_datapoint(self, date, data):
         """Docstring"""
-        if float(data) >= float(self.t_max):
-            self.send_action_to_hvac(date, "TurnOnAc", self.TICKETS)
-        elif float(data) <= float(self.t_min):
-            self.send_action_to_hvac(date, "TurnOnHeater", self.TICKETS)
+        if float(data) >= float(self.T_MAX):
+            self.send_action_to_hvac(date, "TurnOnAc", data, self.TICKETS)
+        elif float(data) <= float(self.T_MIN):
+            self.send_action_to_hvac(date, "TurnOnHeater", data, self.TICKETS)
 
-    def send_action_to_hvac(self, date, action, nb_tick):
+    def send_action_to_hvac(self, date, action, data, nb_tick):
         """Docstring"""
-        response = requests.get(f"{self.host}/api/hvac/{self.TOKEN}/{action}/{nb_tick}", timeout=10)
-        details = json.loads(response.text)
-        print(details, date)
+        r = requests.get(f"{self.HOST}/api/hvac/{self.TOKEN}/{action}/{nb_tick}")	       
+        details = json.loads(r.text)	      
+        print(details)
+        self.sendEvent(date, action, data)
 
-    def send_event_to_database(self, timestamp, event):
-        """3 events possible, Turn on AC, Turn on Heat or Set to normal"""
-        print(timestamp, event)
-        try:
-            # To implement
-            # voir create_connection.py
+            
+    def send_event_to_database(self, timestamp, event, data):
+        print(timestamp, event, data)
+        print()
+        self.sendEvent(timestamp, event, data)
+        
+    def send_temperature_to_fastapi(self, date, d_p):
+        """Docstring"""
+        print(date, d_p)
+
+    def sendEvent(self, timestamp, event, data):
+        try: 
+            conn = mysql.connector.connect(
+            host="localhost",  # Replace with your MySQL server host
+            user="root",  # Replace with your MySQL username
+            password="1234"  # Replace with your MySQL password
+            )
+            cursor = conn.cursor()
+            # Switch to the newly created database
+            cursor.execute(f"USE {self.DATABASE} ")
+            
+            # insert into table
+            TABLE_NAME = "ac_event"  # Replace with your desired table name
+            insert_query = f"""
+                INSERT INTO {TABLE_NAME} (timestamp, event, temp) 
+                VALUES ('{timestamp}', '{event}', '{data}' )
+            """
+            cursor.execute(insert_query)
+            conn.commit()
+
+            # Close connection
+            cursor.close()
+            conn.close()
+
             pass
         except requests.exceptions.RequestException as exception:
             # To implement
             print(exception)
-
-    def send_temperature_to_fastapi(self, date, d_p):
-        """Docstring"""
-        print(date, d_p)
 
 if __name__ == "__main__":
     main = Main()
