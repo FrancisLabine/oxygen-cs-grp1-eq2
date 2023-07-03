@@ -3,4 +3,19 @@ repos:
     rev: v2.17.4
     hooks:
       - id: pylint
-        args: [--rcfile=.pylintrc]  
+        args: [--rcfile=.pylintrc]
+
+  - repo: https://github.com/PyCQA/flake8
+    rev: 5.0.4
+    hooks:
+    - id: flake8
+
+  - repo: https://github.com/psf/black
+    rev: 22.12.0
+    hooks:
+    - id: black
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+    - id: trailing-whitespace
