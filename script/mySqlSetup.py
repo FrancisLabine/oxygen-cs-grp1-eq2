@@ -18,7 +18,7 @@ cursor.execute(f"USE {database_name}")
 table_name = "AC_Event"  # Replace with your desired table name
 cursor = conn.cursor()
 create_table_query = f"""
-    CREATE TABLE {table_name} (
+    CREATE TABLE IF NOT EXISTS {table_name} (
         id INT AUTO_INCREMENT PRIMARY KEY,
         timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         event VARCHAR(64) NOT NULL,

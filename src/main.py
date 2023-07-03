@@ -3,12 +3,13 @@ import logging
 import requests
 import json
 import time
+import os
 
 class Main:
     def __init__(self):
         self._hub_connection = None
-        self.HOST = "34.95.34.5"  # Setup your host here
-        self.TOKEN = "fHtJqgMACx"  # Setup your token here
+        self.HOST = "https://34.95.34.5"  # Setup your host here
+        self.TOKEN = None  # Setup your token here
         self.TICKETS = None  # Setup your tickets here
         self.T_MAX = 23  # Setup your max temperature here
         self.T_MIN = 18  # Setup your min temperature here
@@ -22,6 +23,9 @@ class Main:
         #     self.dbConnection.close()
 
     def setup(self):
+        # exec(open(os.getcwd() + "/script/mySqlSetup.py").read())
+        exec(open(os.getcwd() + "/script/setEnvVariables.py").read())
+        self.TOKEN = "fHtJqgMACx" #os.environ.get("TOKEN")
         self.setSensorHub()
 
     def start(self):
