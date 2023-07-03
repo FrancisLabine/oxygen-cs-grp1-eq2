@@ -1,17 +1,16 @@
 """Imports"""
+from signalrcore.hub_connection_builder import HubConnectionBuilder
 import json
 import logging
 import time
 import os
 import requests
 
-from signalrcore.hub_connection_builder import HubConnectionBuilder
-
 
 class Main:
     """Docstring"""
     def __init__(self):
-        self._hub_connection = None
+        self.hub_connection = None
         self.HOST = "https://34.95.34.5"  # Setup your host here
         self.TOKEN = None  # Setup your token here
         self.TICKETS = None  # Setup your tickets here
@@ -28,7 +27,7 @@ class Main:
 
     def setup(self):
         # exec(open(os.getcwd() + "/script/mySqlSetup.py").read())
-        exec(open(os.getcwd() + "/script/setEnvVariables.py").read())
+        exec(open(os.getcwd() + "/script/set_Env_Variables.py").read())
         self.TOKEN = "fHtJqgMACx" #os.environ.get("TOKEN")
         """Docstring"""
         self.set_sensor_hub()
@@ -46,7 +45,7 @@ class Main:
         """Docstring"""
         self.hub_connection = (
             HubConnectionBuilder()
-            .with_url(f"{self.host}/SensorHub?token={self.token}")
+            .with_url(f"{self.HOST}/SensorHub?token={self.TOKEN}")
             .configure_logging(logging.INFO)
             .with_automatic_reconnect(
                 {
@@ -79,13 +78,13 @@ class Main:
     def analyze_datapoint(self, date, data):
         """Docstring"""
         if float(data) >= float(self.t_max):
-            self.send_action_to_hvac(date, "TurnOnAc", self.tickets)
+            self.send_action_to_hvac(date, "TurnOnAc", self.TICKETS)
         elif float(data) <= float(self.t_min):
-            self.send_action_to_hvac(date, "TurnOnHeater", self.tickets)
+            self.send_action_to_hvac(date, "TurnOnHeater", self.TICKETS)
 
     def send_action_to_hvac(self, date, action, nb_tick):
         """Docstring"""
-        response = requests.get(f"{self.host}/api/hvac/{self.token}/{action}/{nb_tick}", timeout=10)
+        response = requests.get(f"{self.host}/api/hvac/{self.TOKEN}/{action}/{nb_tick}", timeout=10)
         details = json.loads(response.text)
         print(details, date)
 
