@@ -17,7 +17,7 @@ cursor.execute(f"CREATE DATABASE IF NOT EXISTS {DATABAS_NAME}")
 cursor.execute(f"USE {DATABAS_NAME}")
 
 # Create a table
-TABLE_NAME = "AC_Event"  # Replace with your desired table name
+TABLE_NAME = "ac_event"  # Replace with your desired table name
 cursor = conn.cursor()
 create_table_query = f"""
     CREATE TABLE IF NOT EXISTS {TABLE_NAME} (
@@ -31,3 +31,4 @@ cursor.execute(create_table_query)
 
 # Close the cursor
 cursor.close()
+conn.close()
