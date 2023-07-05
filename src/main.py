@@ -28,8 +28,8 @@ class Main:
 
     def setup(self):
         """Docstring"""
-        self.set_db()
         self.set_env_vars()
+        self.set_db()  
         self.set_sensor_hub()
 
     def start(self):
@@ -90,6 +90,7 @@ class Main:
 
     def send_event_to_database(self, timestamp, event, data):
         """Docstring"""
+        print(timestamp, event, data)
         try:
             conn = mysql.connector.connect(
             host="localhost",  # Replace with your MySQL server host
@@ -112,7 +113,6 @@ class Main:
             # Close connection
             cursor.close()
             conn.close()
-            print(timestamp, event, data)
         except requests.exceptions.RequestException as exception:
             # To implement
             print(exception)
@@ -131,12 +131,11 @@ class Main:
         )
 
         # Create a new database
-        DB_NAME = "OxygenDB"
         cursor = conn.cursor()
-        cursor.execute(f"CREATE DATABASE IF NOT EXISTS {DB_NAME}")
+        cursor.execute(f"CREATE DATABASE IF NOT EXISTS {self.DATABASE}")
 
         # Switch to the newly created database
-        cursor.execute(f"USE {DB_NAME}")
+        cursor.execute(f"USE {self.DATABASE}")
 
         # Create a table
         TABLE_NAME = "ac_event"
