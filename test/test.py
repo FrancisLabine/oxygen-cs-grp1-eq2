@@ -23,7 +23,7 @@ class Tests(unittest.TestCase) :
     def test_set_sensor_hub(self):
         """Docstring"""
         self.main.set_sensor_hub()
-        self.assertIsNotNone(self.main._hub_connection)
+        self.assertIsNotNone(self.main.get_hub_connection())
 
     def test_analyze_datapoint_turn_on_ac(self):
         """Docstring"""

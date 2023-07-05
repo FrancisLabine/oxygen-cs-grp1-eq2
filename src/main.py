@@ -22,6 +22,10 @@ class Main:
         if self._hub_connection is not None:
             self._hub_connection.stop()
 
+    def get_hub_connection(self):
+        """Docstring"""
+        return self._hub_connection
+        
     def setup(self):
         """Docstring"""
         with open(os.getcwd() + "/script/my_Sql_Setup.py", encoding='UTF-8') as file :
