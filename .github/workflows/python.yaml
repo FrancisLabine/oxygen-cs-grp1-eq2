@@ -27,7 +27,7 @@ jobs:
         env:
             TOKEN: ${{secrets.DOCKER_CODE}}
         run:
-            python /script/set_Env_Variables.py
+            python ./script/set_Env_Variables.py
 
       - name: Lint with pylint
         run: |
