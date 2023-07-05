@@ -9,10 +9,7 @@ Il n'y a seulement qu'une table qui servira a contenir les différents snapshots
 
 | Colonne | Explication |
 | ----------- | ----------- |
-|id| identifiant du snapshot|
-|timestamp| Date et temps de l'exécution du snapshot|
-|backlog| Nombre de tâches dans le backlog|
-|a_faire| Nombre de tâches dans la colonne a_faire|
-|en_cours| Nombre de tâches dans la colonne en_cours|
-|revue| Nombre de tâches en revue|
-|termine| Nombre de tâches termine|
+|id| identifiant de l'event|
+|timestamp| Date et temps de l'évenement.|
+|event| Type d'évenement. Air chaud ou froid.|
+|temp| La température qui a causé l'évenement.|
