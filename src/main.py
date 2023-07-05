@@ -25,7 +25,7 @@ class Main:
     def get_hub_connection(self):
         """Docstring"""
         return self._hub_connection
-        
+
     def setup(self):
         """Docstring"""
         with open(os.getcwd() + "/script/my_Sql_Setup.py", encoding='UTF-8') as file :
