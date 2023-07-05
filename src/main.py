@@ -11,25 +11,21 @@ class Main:
     """Docstring"""
     def __init__(self):
         self._hub_connection = None
-        self.HOST = "http://34.95.34.5"  # Setup your host here
-        self.TOKEN = None  # Setup your token here
-        self.TICKETS = 3  # Setup your tickets here
-        self.T_MAX = 23  # Setup your max temperature here
-        self.T_MIN = 18  # Setup your min temperature here
-        self.DATABASE = "oxygendb"  # Setup your database here
-        #self.dbConnection = None
+        self.HOST = os.environ.get("HOST")  # api host
+        self.TOKEN = os.environ.get("TOKEN")   # token 
+        self.TICKETS = os.environ.get("TICKETS")   # nb of tickets 
+        self.T_MAX = os.environ.get("T_MAX")   # max temperature 
+        self.T_MIN = os.environ.get("T_MIN")   #  min temperature 
+        self.DATABASE = os.environ.get("DATABASE")  # database name
 
     def __del__(self):
         if self._hub_connection is not None:
             self._hub_connection.stop()
-        # if self.dbConnection != None:
-        #     self.dbConnection.close()
 
     def setup(self):
         exec(open(os.getcwd() + "/script/my_Sql_Setup.py").read())
         exec(open(os.getcwd() + "/script/set_Env_Variables.py").read())
-        self.TOKEN = "fHtJqgMACx" #os.environ.get("TOKEN")
-        """Docstring"""
+        self.TOKEN = os.environ.get('TOKEN') 
         self.set_sensor_hub()
 
     def start(self):

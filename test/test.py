@@ -1,29 +1,18 @@
 
 import os
 import unittest
-from unittest.mock import MagicMock, patch
-from src.main import Main
+from unittest.mock import  MagicMock, patch
+from ..src.main import Main
+
 
 class Tests(unittest.TestCase) :
-    def main(self):
-        self.Test_Scripts()
 
-##Test scripts
-    def test_Script_sql(self):
-        try :
-            exec(open(os.getcwd() + "/script/my_Sql_Setup.py").read())
-        except Exception :
-            self.fail("script sql retourne une exception.")
-        
-    def test_Script_EnvVar(self):
-        try :
-           exec(open(os.getcwd() + "/script/set_Env_Variables.py").read())
-        except Exception :
-            self.fail("script de variable d'environnement retourne une exception.")
-
-        self.assertEqual(os.environ.get("TOKEN"),"fHtJqgMACx")
-
-##Test fonction main       
+    #retourne un message d'erreur lorsque le token n'est pas définit
+    def test_variable_token_invalide(self):
+        with self.assertRaises(Exception):
+             exec(open(os.getcwd() + "/script/set_Env_Variables.py").read())
+       
+    #Test fonction main       
     """Docstring"""
     def setUp(self):
         self.main = Main()
