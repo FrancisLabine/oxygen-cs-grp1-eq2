@@ -2,7 +2,7 @@
 import os
 import unittest
 from unittest.mock import  MagicMock, patch
-from ..src.main import Main
+from src.main import Main
 
 
 class Tests(unittest.TestCase) :
@@ -23,37 +23,42 @@ class Tests(unittest.TestCase) :
     def test_set_sensor_hub(self):
         """Docstring"""
         self.main.set_sensor_hub()
-        self.assertIsNotNone(self.main.hub_connection)
+        self.assertIsNotNone(self.main._hub_connection)
 
     def test_analyze_datapoint_turn_on_ac(self):
         """Docstring"""
-        self.main.t_max = 23
+        self.main.T_MIN = 18
+        self.main.T_MAX = 30
+        self.main.TICKETS = 3
         self.main.send_action_to_hvac = MagicMock()
-        self.main.analyze_datapoint("2023-06-01", 24)
-        self.main.send_action_to_hvac.assert_called_with("2023-06-01", "TurnOnAc", \
-                                                         self.main.tickets)
+        self.main.analyze_datapoint("2023-06-01", 34)
+        self.main.send_action_to_hvac.assert_called_with("2023-06-01", "TurnOnAc",34, \
+                                                         self.main.TICKETS)
 
     def test_analyze_datapoint_turn_on_heater(self):
         """Docstring"""
-        self.main.t_min = 18
+        self.main.T_MIN = 18
+        self.main.T_MAX = 30
+        self.main.TICKETS = 3
         self.main.send_action_to_hvac = MagicMock()
         self.main.analyze_datapoint("2023-06-01", 16)
-        self.main.send_action_to_hvac.assert_called_with("2023-06-01", "TurnOnHeater", \
-                                                         self.main.tickets)
+        self.main.send_action_to_hvac.assert_called_with("2023-06-01", "TurnOnHeater", 16, \
+                                                         self.main.TICKETS)
 
     def test_analyze_datapoint_no_action(self):
         """Docstring"""
+        self.main.T_MIN = 18
+        self.main.T_MAX = 30
         self.main.send_action_to_hvac = MagicMock()
         self.main.analyze_datapoint("2023-06-01", 20)
         self.assertFalse(self.main.send_action_to_hvac.called)
 
-
-
     def test_send_event_to_database(self):
         """Docstring"""
         with patch("builtins.print") as mock_print:
-            self.main.send_event_to_database("2023-06-01", "TurnOnAc")
-            mock_print.assert_called_with("2023-06-01", "TurnOnAc")
+            self.main.DATABASE = 'OxygenDB'
+            self.main.send_event_to_database("2023-06-01", "TurnOnAc", 30)
+            mock_print.assert_called_with("2023-06-01", "TurnOnAc", 30)
 
     def test_send_temperature_to_fastapi(self):
         """Docstring"""

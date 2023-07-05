@@ -118,7 +118,7 @@ class Main:
             # Close connection
             cursor.close()
             conn.close()
-
+            print(timestamp, event, data)
             pass
         except requests.exceptions.RequestException as exception:
             # To implement
