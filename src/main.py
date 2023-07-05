@@ -28,12 +28,8 @@ class Main:
 
     def setup(self):
         """Docstring"""
-        with open(os.getcwd() + "/script/my_Sql_Setup.py", encoding='UTF-8') as file :
-            file.read()
-
-        with open(os.getcwd() + "/script/set_Env_Variables.py", encoding='UTF-8') as file :
-            file.read()
-
+        self.set_db()
+        self.set_env_vars()
         self.set_sensor_hub()
 
     def start(self):
@@ -124,6 +120,59 @@ class Main:
     def send_temperature_to_fastapi(self, date, d_p):
         """Docstring"""
         print(date, d_p)
+
+    def set_db(self):
+        # Establish a connection to the MySQL server
+        conn = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="1234"
+        )
+
+        # Create a new database
+        DB_NAME = "OxygenDB"
+        cursor = conn.cursor()
+        cursor.execute(f"CREATE DATABASE IF NOT EXISTS {DB_NAME}")
+
+        # Switch to the newly created database
+        cursor.execute(f"USE {DB_NAME}")
+
+        # Create a table
+        TABLE_NAME = "ac_event"
+        cursor = conn.cursor()
+        create_table_query = f"""
+            CREATE TABLE IF NOT EXISTS {TABLE_NAME} (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                event VARCHAR(64) NOT NULL,
+                temp DECIMAL(6,2) NOT NULL         
+            )
+        """
+        cursor.execute(create_table_query)
+
+        # Close the cursor
+        cursor.close()
+        conn.close()
+
+    def set_env_vars(self):
+        #Met les variables d'environnement par défaut s'ils n'existent pas.
+        if not os.environ.get('TOKEN') :
+            raise ValueError("TOKEN INEXISTANT")
+
+        if not os.environ.get('HOST') :
+            os.environ['HOST'] = "http://34.95.34.5"
+
+        if not os.environ.get('TICKETS') :
+            os.environ['TICKETS'] = '6'
+
+        if not os.environ.get('T_MAX') :
+            os.environ['T_MAX'] = '35'
+
+        if not os.environ.get('T_MIN') :
+            os.environ['T_MIN'] = '15'
+
+        if not os.environ.get('DATABASE') :
+            os.environ['DATABASE'] = "oxygendb"
 
 if __name__ == "__main__":
     main = Main()

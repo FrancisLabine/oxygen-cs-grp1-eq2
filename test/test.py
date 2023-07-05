@@ -51,8 +51,8 @@ class Tests(unittest.TestCase) :
         """Docstring"""
 
         with patch("builtins.print") as mock_print:
-            self.main.setup()
             self.main.DATABASE = 'OxygenDB'
+            self.main.set_db()
             self.main.send_event_to_database("2023-06-01", "TurnOnAc", 30)
             mock_print.assert_called_with("2023-06-01", "TurnOnAc", 30)
 
