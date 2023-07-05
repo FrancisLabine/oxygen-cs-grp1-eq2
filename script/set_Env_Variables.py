@@ -1,7 +1,7 @@
 """Imports"""
 import os
 
-"""Met les variables d'environnement par défaut s'ils n'existent pas."""
+#Met les variables d'environnement par défaut s'ils n'existent pas.
 if not os.environ.get('TOKEN') :
     raise ValueError("TOKEN INEXISTANT")
 

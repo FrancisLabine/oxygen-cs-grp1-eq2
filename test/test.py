@@ -12,17 +12,13 @@ class Tests(unittest.TestCase) :
     #         open(os.getcwd() + "/script/set_env_variables.py", encoding='UTF-8').read()
 
     #Test fonction main
-    
+
     def setUp(self):
         """Docstring"""
         self.main = Main()
         self.main.T_MIN = '18'
         self.main.T_MAX = '30'
         self.main.TICKETS = '3'
-
-    def tearDown(self):
-        """Docstring"""
-        pass
 
     def test_set_sensor_hub(self):
         """Docstring"""
@@ -31,7 +27,6 @@ class Tests(unittest.TestCase) :
 
     def test_analyze_datapoint_turn_on_ac(self):
         """Docstring"""
-        
         self.main.send_action_to_hvac = MagicMock()
         self.main.analyze_datapoint("2023-06-01", 34)
         self.main.send_action_to_hvac.assert_called_with("2023-06-01", "TurnOnAc",34, \
@@ -39,7 +34,7 @@ class Tests(unittest.TestCase) :
 
     def test_analyze_datapoint_turn_on_heater(self):
         """Docstring"""
-       
+
         self.main.send_action_to_hvac = MagicMock()
         self.main.analyze_datapoint("2023-06-01", 16)
         self.main.send_action_to_hvac.assert_called_with("2023-06-01", "TurnOnHeater", 16, \

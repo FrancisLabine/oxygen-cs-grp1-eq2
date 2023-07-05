@@ -83,7 +83,7 @@ class Main:
 
     def send_action_to_hvac(self, date, action, data, nb_tick):
         """Docstring"""
-        request = requests.get(f"{self.HOST}/api/hvac/{self.TOKEN}/{action}/{nb_tick}", timeout=10)	       
+        request = requests.get(f"{self.HOST}/api/hvac/{self.TOKEN}/{action}/{nb_tick}", timeout=10)
         details = json.loads(request.text)
         print(details)
         self.send_event_to_database(date, action, data)
