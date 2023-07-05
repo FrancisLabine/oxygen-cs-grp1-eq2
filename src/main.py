@@ -122,6 +122,7 @@ class Main:
         print(date, d_p)
 
     def set_db(self):
+        """Docstring"""
         # Establish a connection to the MySQL server
         conn = mysql.connector.connect(
             host="localhost",
@@ -155,6 +156,7 @@ class Main:
         conn.close()
 
     def set_env_vars(self):
+        """Docstring"""
         #Met les variables d'environnement par défaut s'ils n'existent pas.
         if not os.environ.get('TOKEN') :
             raise ValueError("TOKEN INEXISTANT")
