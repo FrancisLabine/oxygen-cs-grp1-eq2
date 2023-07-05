@@ -13,9 +13,9 @@ class Main:
         self._hub_connection = None
         self.HOST = os.environ.get("HOST")  # api host
         self.TOKEN = os.environ.get("TOKEN")   # token 
-        self.TICKETS = os.environ.get("TICKETS")   # nb of tickets 
-        self.T_MAX = os.environ.get("T_MAX")   # max temperature 
-        self.T_MIN = os.environ.get("T_MIN")   #  min temperature 
+        self.TICKETS = int(os.environ.get("TICKETS"))   # nb of tickets 
+        self.T_MAX = int(os.environ.get("T_MAX"))   # max temperature 
+        self.T_MIN = int(os.environ.get("T_MIN"))   #  min temperature 
         self.DATABASE = os.environ.get("DATABASE")  # database name
 
     def __del__(self):
