@@ -1,9 +1,9 @@
 """Imports"""
-from signalrcore.hub_connection_builder import HubConnectionBuilder
 import json
 import logging
 import time
 import os
+from signalrcore.hub_connection_builder import HubConnectionBuilder
 import mysql.connector
 import requests
 
@@ -11,11 +11,11 @@ class Main:
     """Docstring"""
     def __init__(self):
         self._hub_connection = None
-        self.HOST = os.environ.get("HOST")  # api host
-        self.TOKEN = os.environ.get("TOKEN")   # token 
-        self.TICKETS = int(os.environ.get("TICKETS"))   # nb of tickets 
-        self.T_MAX = int(os.environ.get("T_MAX"))   # max temperature 
-        self.T_MIN = int(os.environ.get("T_MIN"))   #  min temperature 
+        self.HOST = os.environ.get("HOST")          # api host
+        self.TOKEN = os.environ.get("TOKEN")        # token
+        self.TICKETS = os.environ.get("TICKETS")    # nb of tickets
+        self.T_MAX = os.environ.get("T_MAX")        # max temperature
+        self.T_MIN = os.environ.get("T_MIN")        # min temperature
         self.DATABASE = os.environ.get("DATABASE")  # database name
 
     def __del__(self):
@@ -23,9 +23,13 @@ class Main:
             self._hub_connection.stop()
 
     def setup(self):
-        exec(open(os.getcwd() + "/script/my_Sql_Setup.py").read())
-        exec(open(os.getcwd() + "/script/set_Env_Variables.py").read())
-        self.TOKEN = os.environ.get('TOKEN') 
+        """Docstring"""
+        with open(os.getcwd() + "/script/my_Sql_Setup.py", encoding='UTF-8') as file :
+            file.read()
+
+        with open(os.getcwd() + "/script/set_Env_Variables.py", encoding='UTF-8') as file :
+            file.read()
+
         self.set_sensor_hub()
 
     def start(self):
@@ -63,10 +67,9 @@ class Main:
     def on_sensor_data_received(self, data):
         """Docstring"""
         try:
-            #print(data[0]["date"] + " --> " + data[0]["data"])
             date = data[0]["date"]
             d_p = float(data[0]["data"])
-            #self.send_temperature_to_fastapi(date, d_p)
+            self.send_temperature_to_fastapi(date, d_p)
             self.analyze_datapoint(date, d_p)
         except ValueError as err:
             print(err)
@@ -74,29 +77,20 @@ class Main:
     def analyze_datapoint(self, date, data):
         """Docstring"""
         if float(data) >= float(self.T_MAX):
-            self.send_action_to_hvac(date, "TurnOnAc", data, self.TICKETS)
+            self.send_action_to_hvac(date, "TurnOnAc", data, int(self.TICKETS))
         elif float(data) <= float(self.T_MIN):
-            self.send_action_to_hvac(date, "TurnOnHeater", data, self.TICKETS)
+            self.send_action_to_hvac(date, "TurnOnHeater", data, int(self.TICKETS))
 
     def send_action_to_hvac(self, date, action, data, nb_tick):
         """Docstring"""
-        r = requests.get(f"{self.HOST}/api/hvac/{self.TOKEN}/{action}/{nb_tick}")	       
-        details = json.loads(r.text)	      
+        request = requests.get(f"{self.HOST}/api/hvac/{self.TOKEN}/{action}/{nb_tick}", timeout=10)	       
+        details = json.loads(request.text)
         print(details)
-        self.sendEvent(date, action, data)
+        self.send_event_to_database(date, action, data)
 
-            
     def send_event_to_database(self, timestamp, event, data):
-        print(timestamp, event, data)
-        print()
-        self.sendEvent(timestamp, event, data)
-        
-    def send_temperature_to_fastapi(self, date, d_p):
         """Docstring"""
-        print(date, d_p)
-
-    def sendEvent(self, timestamp, event, data):
-        try: 
+        try:
             conn = mysql.connector.connect(
             host="localhost",  # Replace with your MySQL server host
             user="root",  # Replace with your MySQL username
@@ -105,7 +99,7 @@ class Main:
             cursor = conn.cursor()
             # Switch to the newly created database
             cursor.execute(f"USE {self.DATABASE} ")
-            
+
             # insert into table
             TABLE_NAME = "ac_event"  # Replace with your desired table name
             insert_query = f"""
@@ -119,10 +113,13 @@ class Main:
             cursor.close()
             conn.close()
             print(timestamp, event, data)
-            pass
         except requests.exceptions.RequestException as exception:
             # To implement
             print(exception)
+
+    def send_temperature_to_fastapi(self, date, d_p):
+        """Docstring"""
+        print(date, d_p)
 
 if __name__ == "__main__":
     main = Main()

@@ -1,7 +1,9 @@
+"""Imports"""
 import os
 
+"""Met les variables d'environnement par défaut s'ils n'existent pas."""
 if not os.environ.get('TOKEN') :
-    raise Exception("TOKEN INEXISTANT")
+    raise ValueError("TOKEN INEXISTANT")
 
 if not os.environ.get('HOST') :
     os.environ['HOST'] = "http://34.95.34.5"
