@@ -29,7 +29,7 @@ class Main:
     def setup(self):
         """Docstring"""
         self.set_env_vars()
-        self.set_db()  
+        self.set_db()
         self.set_sensor_hub()
 
     def start(self):
