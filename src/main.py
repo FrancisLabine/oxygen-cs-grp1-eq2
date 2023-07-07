@@ -11,12 +11,12 @@ class Main:
     """Docstring"""
     def __init__(self):
         self._hub_connection = None
-        self.HOST = os.environ.get("HOST")          # api host
-        self.TOKEN = os.environ.get("TOKEN")        # token
-        self.TICKETS = os.environ.get("TICKETS")    # nb of tickets
-        self.T_MAX = os.environ.get("T_MAX")        # max temperature
-        self.T_MIN = os.environ.get("T_MIN")        # min temperature
-        self.DATABASE = os.environ.get("DATABASE")  # database name
+        self.HOST = None              # api host
+        self.TOKEN = None             # token
+        self.TICKETS = None           # nb of tickets
+        self.T_MAX = None             # max temperature
+        self.T_MIN = None             # min temperature
+        self.DATABASE = None          # database name
 
     def __del__(self):
         if self._hub_connection is not None:
@@ -156,6 +156,14 @@ class Main:
 
     def set_env_vars(self):
         """Docstring"""
+
+        self.HOST = os.environ.get("HOST")          # api host
+        self.TOKEN = os.environ.get("TOKEN")        # token
+        self.TICKETS = os.environ.get("TICKETS")    # nb of tickets
+        self.T_MAX = os.environ.get("T_MAX")        # max temperature
+        self.T_MIN = os.environ.get("T_MIN")        # min temperature
+        self.DATABASE = os.environ.get("DATABASE")  # database name
+
         #Met les variables d'environnement par défaut s'ils n'existent pas.
         if not self.TOKEN or self.TOKEN == '' :
             raise ValueError("TOKEN INEXISTANT")

@@ -1,9 +1,9 @@
 """Imports"""
 import unittest
+import os
 from unittest import mock
 from unittest.mock import  MagicMock, patch
 from src.main import Main
-import os
 
 class Tests(unittest.TestCase) :
     """Docstring"""
@@ -35,7 +35,6 @@ class Tests(unittest.TestCase) :
     def test_variable_environnement_default(self):
         """Docstring"""
         #Les variables ne sont pas pré-définis, une valeur par défault leurs est attribuée
-        self.main.__init__()
         self.main.set_env_vars()
 
         self.assertEqual(self.main.TOKEN,"fHtJqgMACx")
@@ -61,7 +60,6 @@ class Tests(unittest.TestCase) :
     @mock.patch.dict(os.environ, {"TOKEN": "fHtJqgMACx"})
     def test_analyze_datapoint_turn_on_ac(self):
         """Docstring"""
-        self.main.__init__()
         self.main.set_env_vars()
         self.main.send_action_to_hvac = MagicMock()
         self.main.analyze_datapoint("2023-06-01", 50)
@@ -71,7 +69,6 @@ class Tests(unittest.TestCase) :
     @mock.patch.dict(os.environ, {"TOKEN": "fHtJqgMACx"})
     def test_analyze_datapoint_turn_on_heater(self):
         """Docstring"""
-        self.main.__init__()
         self.main.set_env_vars()
         self.main.send_action_to_hvac = MagicMock()
         self.main.analyze_datapoint("2023-06-01", 8)
@@ -81,7 +78,6 @@ class Tests(unittest.TestCase) :
     @mock.patch.dict(os.environ, {"TOKEN": "fHtJqgMACx"})
     def test_analyze_datapoint_no_action(self):
         """Docstring"""
-        self.main.__init__()
         self.main.set_env_vars()
         self.main.send_action_to_hvac = MagicMock()
         self.main.analyze_datapoint("2023-06-01", 20)
@@ -90,7 +86,6 @@ class Tests(unittest.TestCase) :
     @mock.patch.dict(os.environ, {"TOKEN": "fHtJqgMACx"})
     def test_send_event_to_database(self):
         """Docstring"""
-        self.main.__init__()
         self.main.set_env_vars()
         self.main.send_event_to_database = MagicMock()
         self.main.TOKEN = 'fHtJqgMACx'
@@ -102,7 +97,6 @@ class Tests(unittest.TestCase) :
     @mock.patch.dict(os.environ, {"TOKEN": "fHtJqgMACx"})
     def test_send_temperature_to_fastapi(self):
         """Docstring"""
-        self.main.__init__()
         self.main.set_env_vars()
         with patch("builtins.print") as mock_print:
             self.main.send_temperature_to_fastapi("2023-06-01", 25.5)
