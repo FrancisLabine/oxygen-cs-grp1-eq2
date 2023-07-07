@@ -157,23 +157,23 @@ class Main:
     def set_env_vars(self):
         """Docstring"""
         #Met les variables d'environnement par défaut s'ils n'existent pas.
-        if not os.environ.get('TOKEN') :
+        if not self.TOKEN or self.TOKEN == '' :
             raise ValueError("TOKEN INEXISTANT")
 
-        if not os.environ.get('HOST') :
-            os.environ['HOST'] = "http://34.95.34.5"
+        if not self.HOST or self.HOST == '':
+            self.HOST = "http://34.95.34.5"
 
-        if not os.environ.get('TICKETS') :
-            os.environ['TICKETS'] = '6'
+        if not self.TICKETS or self.TICKETS == '':
+            self.TICKETS = '6'
 
-        if not os.environ.get('T_MAX') :
-            os.environ['T_MAX'] = '35'
+        if not self.T_MAX or self.T_MAX == '':
+            self.T_MAX = '35'
 
-        if not os.environ.get('T_MIN') :
-            os.environ['T_MIN'] = '15'
+        if not self.T_MIN or self.T_MIN == '':
+            self.T_MIN = '15'
 
-        if not os.environ.get('DATABASE') :
-            os.environ['DATABASE'] = "oxygendb"
+        if not self.DATABASE or self.DATABASE == '':
+            self.DATABASE = "oxygendb"
 
 if __name__ == "__main__":
     main = Main()
