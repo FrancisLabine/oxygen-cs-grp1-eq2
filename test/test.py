@@ -22,7 +22,6 @@ class Tests(unittest.TestCase) :
     def test_variable_environnement(self):
         """Docstring"""
         #Les variables sont déjà pré-définis (variable d'environnement)
-        self.main.__init__()
         self.main.set_env_vars()
         self.assertEqual(self.main.TOKEN, "fHtJqgMACx")
         self.assertEqual(self.main.HOST,"HTTP://34.95.34.5")
