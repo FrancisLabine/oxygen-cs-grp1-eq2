@@ -1,7 +1,10 @@
+
 name: Python package
 
 on: [push]
-
+env :
+  test_token: ${{secrets.DOCKER_CODE}}
+  
 jobs:
   build:
 
@@ -21,6 +24,13 @@ jobs:
           python -m pip install --upgrade pip     
           pip install -r requirements.txt
       - name: Lint with pylint
+        env:
+          TOKEN: ${{secrets.TOKEN}}
+          HOST: ${{secrets.HOST}}
+          T_MAX: ${{secrets.T_MAX}}
+          T_MIN: ${{secrets.T_MIN}}
+          TICKETS: ${{secrets.TICKETS}}
+          DATABASE: ${{secrets.DATABASE}}
         run: |
           # Run pylint on your Python files
           pylint $(git ls-files '*.py')

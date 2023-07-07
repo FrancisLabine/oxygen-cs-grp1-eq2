@@ -6,6 +6,9 @@ name = "pypi"
 [packages]
 requests = "*"
 signalrcore = "*"
+mysql = "*"
+mysqlclient = "*"
+mysql-connector-python = "*"
 
 [dev-packages]
 
