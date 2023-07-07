@@ -25,6 +25,7 @@ Ces métriques sont utile pour recevoir de la rétroaction qui permettera d'amé
     | ----------- | ----|--|------- | ---|--|--|
     |1         |2023-01-23T09:20:08Z|12|8|4|66.66|
     |...|...|...|...|...|...|
+  
 - Quantité de tests automatisés réussis et échoués.
      ID | timestamp | totalTests |successTests | failTests | rateTests |
     | ----------- | ----|--|------- | ---|--|--|
