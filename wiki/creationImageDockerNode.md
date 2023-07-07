@@ -1,4 +1,4 @@
-# Création d'une image Docker pour Oxygen-CS
+# Création d'une image Docker pour Oxygen-OS
 
 Ce Dockerfile suit un processus en deux étapes : la première étape construit l'image, tandis que la deuxième étape l'exécute.
 
