@@ -11,12 +11,12 @@ class Main:
     """Docstring"""
     def __init__(self):
         self._hub_connection = None
-        self.HOST = os.environ.get("HOST")          # api host
-        self.TOKEN = os.environ.get("TOKEN")        # token
-        self.TICKETS = os.environ.get("TICKETS")    # nb of tickets
-        self.T_MAX = os.environ.get("T_MAX")        # max temperature
-        self.T_MIN = os.environ.get("T_MIN")        # min temperature
-        self.DATABASE = os.environ.get("DATABASE")  # database name
+        self.HOST = None              # api host
+        self.TOKEN = None             # token
+        self.TICKETS = None           # nb of tickets
+        self.T_MAX = None             # max temperature
+        self.T_MIN = None             # min temperature
+        self.DATABASE = None          # database name
 
     def __del__(self):
         if self._hub_connection is not None:
@@ -156,24 +156,32 @@ class Main:
 
     def set_env_vars(self):
         """Docstring"""
+
+        self.HOST = os.environ.get("HOST")          # api host
+        self.TOKEN = os.environ.get("TOKEN")        # token
+        self.TICKETS = os.environ.get("TICKETS")    # nb of tickets
+        self.T_MAX = os.environ.get("T_MAX")        # max temperature
+        self.T_MIN = os.environ.get("T_MIN")        # min temperature
+        self.DATABASE = os.environ.get("DATABASE")  # database name
+
         #Met les variables d'environnement par défaut s'ils n'existent pas.
-        if not os.environ.get('TOKEN') :
+        if not self.TOKEN or self.TOKEN == '' :
             raise ValueError("TOKEN INEXISTANT")
 
-        if not os.environ.get('HOST') :
-            os.environ['HOST'] = "http://34.95.34.5"
+        if not self.HOST or self.HOST == '':
+            self.HOST = "http://34.95.34.5"
 
-        if not os.environ.get('TICKETS') :
-            os.environ['TICKETS'] = '6'
+        if not self.TICKETS or self.TICKETS == '':
+            self.TICKETS = '6'
 
-        if not os.environ.get('T_MAX') :
-            os.environ['T_MAX'] = '35'
+        if not self.T_MAX or self.T_MAX == '':
+            self.T_MAX = '35'
 
-        if not os.environ.get('T_MIN') :
-            os.environ['T_MIN'] = '15'
+        if not self.T_MIN or self.T_MIN == '':
+            self.T_MIN = '15'
 
-        if not os.environ.get('DATABASE') :
-            os.environ['DATABASE'] = "oxygendb"
+        if not self.DATABASE or self.DATABASE == '':
+            self.DATABASE = "oxygendb"
 
 if __name__ == "__main__":
     main = Main()
