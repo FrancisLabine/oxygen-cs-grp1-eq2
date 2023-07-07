@@ -1,4 +1,4 @@
-# Choix des tâches de pipeline
+# Choix des tâches de pipeline pour Oxygen-CS
 Ce fichier YAML de pipeline automatise le processus de construction, de vérification de style et de test d'un package Python. Il est déclenché à chaque événement de push dans le dépôt.
 
 ## Aperçu du pipeline :
