@@ -1,7 +1,7 @@
 # Stage 1: Build Stage
 FROM python:3.9 as builder
 
-WORKDIR /app
+WORKDIR /src
 
 COPY requirements.txt .
 
@@ -15,8 +15,8 @@ FROM python:3.9-alpine
 # Install the MySQL client package
 RUN apk update && apk add --no-cache mariadb-connector-c-dev
 
-WORKDIR /app
+WORKDIR /src
 
-COPY --from=builder /app .
+COPY --from=builder /src .
 
 CMD ["python", "main.py"]
