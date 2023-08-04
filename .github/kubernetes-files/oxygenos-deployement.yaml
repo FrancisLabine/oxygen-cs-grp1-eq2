@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oxygenos-deployment
+  labels:
+    app: oxygenos
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: oxygenos
+  template:
+    metadata:
+      labels:
+        app: oxygenos
+    spec:
+      containers:
+      - name: oxygenos
+        image: zipthezap/log680-python:latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: 64Mi
+            cpu: 64m
+          limits:
+            memory: 64Mi
+            cpu: 64m
