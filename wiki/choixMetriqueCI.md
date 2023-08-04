@@ -7,6 +7,7 @@ Ces métriques sont utile pour recevoir de la rétroaction qui permettera d'amé
 ##### Nouvelles Métriques :
 
 - Temps d’exécution du pipeline de build pour un build donné.
+  
     | ID | build | totalTime |
     | ----------- | ----------- | ---|
     |1         |12354|32|
@@ -21,13 +22,15 @@ Ces métriques sont utile pour recevoir de la rétroaction qui permettera d'amé
     |...|...|...|...|
 
 - Quantité de builds réussis et échoués.
+  
     | ID | timestamp | totalBuild |successBuild | failBuild | rateBuild |
-    | ----------- | ----|--|------- | ---|--|--|
+    | ----------- | ----|--|------- | ---|--|
     |1         |2023-01-23T09:20:08Z|12|8|4|66.66|
     |...|...|...|...|...|...|
-
+  
 - Quantité de tests automatisés réussis et échoués.
-    | ID | timestamp | totalTests |successTests | failTests | rateTests |
-    | ----------- | ----|--|------- | ---|--|--|
+  
+     ID | timestamp | totalTests |successTests | failTests | rateTests |
+    | ----------- | ----|--|------- | ---|--|
     |1         |2023-01-23T09:20:08Z|44|32|12|27.27|
     |...|...|...|...|...|...|
