@@ -1,0 +1,1 @@
+0 6 * * * /home/cronjob.sh http://localhost:3000/metric/zipthezap/Oxgen-OS---Eq-02---E23/2023-07-01T00:00:00Z/2023-09-01T00:00:00Z > /var/log/cron
