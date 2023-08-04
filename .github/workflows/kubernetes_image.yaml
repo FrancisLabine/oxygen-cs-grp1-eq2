@@ -1,0 +1,13 @@
+name: Publish kubernetes image
+
+on:
+  push:
+    branches: [features/deploiment-kubernetes]
+
+jobs:
+    update_image_kubernetes:
+        name: Push Docker image to kubernetes
+        runs-on: ubuntu-latest
+        steps:
+          - name: update image
+            run: kubectl set image deployment/oxygencs-deployment oxygencs=zipthezap/log680-python:latest
