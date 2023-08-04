@@ -4,3 +4,4 @@ mysql
 pylint
 mysql-connector-python
 pre-commit
+kubectl
